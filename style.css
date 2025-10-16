@@ -1,0 +1,87 @@
+:root {
+    --primary-color: #7b2cbf; /* A rich purple */
+    --secondary-color: #c77dff; /* A lighter lavender */
+    --background-color: #f3e5f5; /* Very light purple background */
+    --card-bg-color: #ffffff;
+    --text-color: #333;
+    --accent-color: #ff9100; /* A pop of orange for accents */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s;
+}
+
+.app-card {
+    border: none;
+    border-radius: 20px;
+    background-color: var(--card-bg-color);
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 12px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #5a189a;
+    border-color: #5a189a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.25rem rgba(123, 44, 191, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+#time-display {
+    color: var(--primary-color);
+    font-size: 6rem;
+    letter-spacing: -2px;
+}
+
+#status-heading {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.progress-bar {
+    background-color: var(--secondary-color);
+    transition: width 1s linear !important;
+}
+
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+#win-gif {
+    max-height: 200px;
+    margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    #time-display {
+        font-size: 4.5rem;
+    }
+    .card-body {
+        padding: 2rem !important;
+    }
+}

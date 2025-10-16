@@ -1,0 +1,62 @@
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Temporary files
+*.tmp
+*.temp
+
+# Favicon / assets (if you want to ignore generated assets)
+# /assets/
+
+# Mac Spotlight
+.metadata_never_index
+
+# VS Code extensions
+.history/
+
+# Coverage
+coverage/
+
+# Lockfiles for other package managers (if present)
+pnpm-lock.yaml
+
+# Ignore built CSS/JS if you generate them
+public/build/
+
+# JetBrains
+*.iml
+
+# Python server cache (if you run simple HTTP servers locally)
+__pycache__/
+*.py[cod]
+
+# Ignore system-specific launcher icons
+favicon.ico
+
+
+.mp3
