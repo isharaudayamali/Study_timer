@@ -1,23 +1,41 @@
 :root {
-    --primary-color: #7b2cbf; /* A rich purple */
-    --secondary-color: #c77dff; /* A lighter lavender */
-    --background-color: #f3e5f5; /* Very light purple background */
-    --card-bg-color: #ffffff;
-    --text-color: #333;
-    --accent-color: #ff9100; /* A pop of orange for accents */
+    --primary-color: #d63384; /* A vibrant Sakura Pink */
+    --secondary-color: #a98ce0; /* A soft Wisteria Purple */
+    --background-color: #fdf6fa; /* Very light pinkish background */
+    --card-bg-color: rgba(255, 255, 255, 0.75); /* Frosted glass effect */
+    --text-color: #4a235a; /* Deep, muted purple for text */
+    --danger-color: #e57373; /* Softer red */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
-    transition: background-color 0.3s;
+    background-image: 
+        radial-gradient(circle at 5% 5%, var(--secondary-color), transparent 40%),
+        radial-gradient(circle at 95% 95%, var(--primary-color), transparent 40%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .app-card {
     border: none;
-    border-radius: 20px;
+    border-radius: 25px;
     background-color: var(--card-bg-color);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeIn 0.6s ease-out forwards;
+    box-shadow: 0 8px 32px 0 rgba(169, 140, 224, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+.app-card:hover {
+    box-shadow: 0 12px 40px 0 rgba(169, 140, 224, 0.3);
 }
 
 .card-title {
@@ -26,60 +44,75 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background-size: 200% auto;
+    border: none;
     padding: 12px 20px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #5a189a;
-    border-color: #5a189a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.form-control:focus, .form-select:focus, .form-check-input:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 0.25rem rgba(123, 44, 191, 0.25);
-}
-
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-#time-display {
-    color: var(--primary-color);
-    font-size: 6rem;
-    letter-spacing: -2px;
-}
-
-#status-heading {
-    color: var(--secondary-color);
+    border-radius: 50px; /* Pill-shaped buttons */
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(214, 51, 132, 0.2);
+    color: white;
     font-weight: 600;
 }
 
+.btn-primary:hover {
+    background-position: right center; /* Change gradient direction */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(214, 51, 132, 0.35);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    border-radius: 50px;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.25rem rgba(169, 140, 224, 0.25);
+}
+
+#time-display {
+    background: -webkit-linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 5.5rem; /* Slightly smaller for the new format */
+    font-weight: 700;
+}
+
+#status-heading {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: rgba(0,0,0,0.05);
+}
+
 .progress-bar {
-    background-color: var(--secondary-color);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     transition: width 1s linear !important;
+    border-radius: 10px;
 }
 
 .modal-content {
     border-radius: 15px;
     border: none;
-}
-
-#win-gif {
-    max-height: 200px;
-    margin: 0 auto;
+    background-color: var(--card-bg-color);
 }
 
 /* Responsive adjustments */
 @media (max-width: 576px) {
     #time-display {
-        font-size: 4.5rem;
+        font-size: 4rem;
     }
     .card-body {
         padding: 2rem !important;

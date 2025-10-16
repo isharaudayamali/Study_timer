@@ -16,24 +16,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modal-title');
 
     // Settings Inputs
-    const sessionDurationInput = document.getElementById('session-duration');
+    const sessionHoursInput = document.getElementById('session-hours');
+    const sessionMinutesInput = document.getElementById('session-minutes');
+    const breakHoursInput = document.getElementById('break-hours');
+    const breakMinutesInput = document.getElementById('break-minutes');
     const totalSessionsInput = document.getElementById('total-sessions');
-    const ringtoneSelect = document.getElementById('ringtone');
-    const breakMusicSelect = document.getElementById('break-music'); // New music selector
+    const breakMusicSelect = document.getElementById('break-music');
 
     // State Variables
     let timerInterval;
     let totalSeconds;
-    let initialDuration;
+    let initialDuration; // in seconds
     let isPaused = false;
     let isBreak = false;
     let currentSession = 1;
     let totalSessions;
-    let breakDuration;
+    let breakDurationInMinutes; // total break duration in minutes
     
     // Audio Objects
     const alarm = new Audio();
-    const breakMusic = new Audio(); // New audio object for break music
+    const breakMusic = new Audio();
     
     const quotes = [
         { text: "Success is the sum of small efforts, repeated day in and day out.", author: "Robert Collier" },
@@ -51,32 +53,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startStudySession() {
         // Get settings
-        const sessionMinutes = parseInt(sessionDurationInput.value);
+        const sessionHours = parseInt(sessionHoursInput.value) || 0;
+        const sessionMinutes = parseInt(sessionMinutesInput.value) || 0;
+        const breakHours = parseInt(breakHoursInput.value) || 0;
+        const breakMinutes = parseInt(breakMinutesInput.value) || 0;
         totalSessions = parseInt(totalSessionsInput.value);
-        breakDuration = parseInt(document.querySelector('input[name="break-duration"]:checked').value);
-        alarm.src = ringtoneSelect.value;
+
+        const totalSessionMinutes = (sessionHours * 60) + sessionMinutes;
+        breakDurationInMinutes = (breakHours * 60) + breakMinutes;
+
+        alarm.src = 'https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3';
         
-        // Setup break music
         const musicSrc = breakMusicSelect.value;
         if (musicSrc) {
             breakMusic.src = musicSrc;
-            breakMusic.loop = true; // Loop the music during the break
+            breakMusic.loop = true;
         } else {
-            breakMusic.src = ''; // Clear source if "None" is selected
+            breakMusic.src = '';
         }
         
-        if (isNaN(sessionMinutes) || isNaN(totalSessions) || sessionMinutes < 1 || totalSessions < 1) {
-            alert("Please enter valid numbers for sessions and duration.");
+        if (totalSessionMinutes < 1 || breakDurationInMinutes < 1 || isNaN(totalSessions) || totalSessions < 1) {
+            alert("Please ensure study, break, and session counts are valid positive numbers.");
             return;
         }
 
-        // Switch screens
         settingsScreen.classList.add('d-none');
         timerScreen.classList.remove('d-none');
         
         currentSession = 1;
-        isBreak = false; // Ensure we start with a study session
-        startNewTimer(sessionMinutes, `📚 Study Session ${currentSession} of ${totalSessions}`);
+        isBreak = false;
+        startNewTimer(totalSessionMinutes, `📚 Study Session ${currentSession} of ${totalSessions}`);
     }
 
     function startNewTimer(minutes, statusText) {
@@ -103,9 +109,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function updateDisplay() {
-        const minutes = Math.floor(totalSeconds / 60);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        // Dynamically change format based on total duration
+        if (initialDuration >= 3600) {
+            timeDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        } else {
+            timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
         document.title = `${timeDisplay.textContent} - Study Bloom`;
 
         const progress = ((initialDuration - totalSeconds) / initialDuration) * 100;
@@ -116,10 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
         isPaused = !isPaused;
         if (isPaused) {
             pauseBtn.innerHTML = '<i class="bi bi-play-fill"></i> Resume';
-            if (isBreak && breakMusic.src) breakMusic.pause(); // Pause music if break is paused
+            if (isBreak && breakMusic.src) breakMusic.pause();
         } else {
             pauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i> Pause';
-            if (isBreak && breakMusic.src) breakMusic.play(); // Resume music if break is resumed
+            if (isBreak && breakMusic.src) breakMusic.play();
         }
     }
 
@@ -135,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextActionBtn.textContent = "Start Over";
             } else {
                 modalTitle.textContent = `✨ Session ${currentSession} Complete! ✨`;
-                nextActionBtn.textContent = `Start ${breakDuration} min Break`;
+                nextActionBtn.textContent = `Start ${breakDurationInMinutes} min Break`;
             }
         } else { // Break just ended
              modalTitle.textContent = "⏰ Break's Over! ⏰";
@@ -150,24 +164,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetToSettings();
             } else {
                 isBreak = true;
-                if (breakMusic.src) breakMusic.play(); // Play music when break starts
-                startNewTimer(breakDuration, '☕️ Break Time!');
+                if (breakMusic.src) breakMusic.play();
+                startNewTimer(breakDurationInMinutes, '☕️ Break Time!');
             }
         } else { // Break just ended, about to start studying
             isBreak = false;
             currentSession++;
             if (breakMusic.src) {
-                breakMusic.pause(); // Stop music when break ends
-                breakMusic.currentTime = 0; // Rewind music to the start
+                breakMusic.pause();
+                breakMusic.currentTime = 0;
             }
-            startNewTimer(parseInt(sessionDurationInput.value), `📚 Study Session ${currentSession} of ${totalSessions}`);
+            const sessionHours = parseInt(sessionHoursInput.value) || 0;
+            const sessionMinutes = parseInt(sessionMinutesInput.value) || 0;
+            const totalSessionMinutes = (sessionHours * 60) + sessionMinutes;
+
+            startNewTimer(totalSessionMinutes, `📚 Study Session ${currentSession} of ${totalSessions}`);
         }
     }
 
     function resetToSettings() {
         clearInterval(timerInterval);
         if (breakMusic.src) {
-            breakMusic.pause(); // Ensure music stops
+            breakMusic.pause();
             breakMusic.currentTime = 0;
         }
         timerScreen.classList.add('d-none');
