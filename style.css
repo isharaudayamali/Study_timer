@@ -21,6 +21,9 @@ body {
         radial-gradient(circle at 95% 95%, var(--primary-color), transparent 40%);
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
 }
 
 .app-card {
@@ -32,15 +35,17 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
     box-shadow: 0 8px 32px 0 rgba(169, 140, 224, 0.2);
     transition: box-shadow 0.3s ease;
+    padding: 2rem;
 }
 
 .app-card:hover {
     box-shadow: 0 12px 40px 0 rgba(169, 140, 224, 0.3);
+    transform: translateY(-5px);
 }
 
 .card-title {
     color: var(--primary-color);
-    font-weight: 700;
+    font-weight: 700;   
 }
 
 .btn-primary {
